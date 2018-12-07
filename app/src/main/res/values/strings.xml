@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Atmospher</string>
+    <string name="backgroundImage">BackgroundImage</string>
 </resources>
