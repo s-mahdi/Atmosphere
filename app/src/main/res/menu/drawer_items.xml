@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/temperatureunit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_hot"
+            android:title="@string/temperature_unit" />
+        <item
+            android:id="@+id/locations"
+            android:icon="@drawable/ic_placeholder"
+            android:title="@string/locations" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/ic_instructions"
+            android:title="@string/about" />
+        <item
+            android:id="@+id/Guide"
+            android:icon="@drawable/ic_about"
+            android:title="@string/guide" />
+        <item
+            android:id="@+id/Givescore"
+            android:icon="@drawable/ic_like"
+            android:title="@string/give_score" />
+        <item
+            android:id="@+id/invitation"
+            android:icon="@drawable/ic_birthday_invitation"
+            android:title="@string/invite_friends" />
+
+
+
+
+
+</menu>

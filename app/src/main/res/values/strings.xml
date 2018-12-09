@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">Atmospher</string>
     <string name="backgroundImage">BackgroundImage</string>
+    <!--drawer items-->
+    <string name="Open">Open</string>
+    <string name="Close">Close</string>
+    <string name="temperature_unit">واحد دما</string>
+    <string name="locations">مکان ها</string>
+    <string name="settings">تنظیمات</string>
+    <string name="about">درباره</string>
+    <string name="guide">راهنما</string>
+    <string name="give_score">امتیاز دهید</string>
+    <string name="invite_friends">دعوت دوستان</string>
+
+
+
+
 </resources>
