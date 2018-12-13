@@ -5,9 +5,9 @@
     <font
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/iraninan_sans"
+        android:font="@font/iranian_sans"
         app:fontStyle="normal"
         app:fontWeight="400"
-        app:font="@font/iraninan_sans"
+        app:font="@font/iranian_sans"
         tools:ignore="ResourceCycle" />
 </font-family>
