@@ -9,4 +9,19 @@
     <string name="defaultCityName">اصفهان</string>
     <string name="imageButton_addCity_description">this button add cities in your atmosphere</string>
     <string name="imageView_climateCondition_description">air condition image</string>
+    <string name="appNameFarsi">اتمسفر</string>
+    <string name="search_places">Search places</string>
+    <string name="finds_city">finds city</string>
+    <string name="search_location">Search Location</string>
+    <!--drawer items-->
+    <string name="refresh">refresh</string>
+    <string name="Open">Open</string>
+    <string name="Close">Close</string>
+    <string name="temperature_unit">واحد دما</string>
+    <string name="locations">مکان ها</string>
+    <string name="settings">تنظیمات</string>
+    <string name="about">درباره</string>
+    <string name="guide">راهنما</string>
+    <string name="give_score">امتیاز دهید</string>
+    <string name="invite_friends">دعوت دوستان</string>
 </resources>
