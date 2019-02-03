@@ -1,15 +1,13 @@
 package com.example.ara.atmospher;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ara.atmospher.Interfaces.OpenWeatherService;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
@@ -29,24 +28,20 @@ import com.karumi.dexter.listener.single.BasePermissionListener;
 import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    // TODO: 19/01/2019 change top bar to toolbar and configure it
-    private static final String API_KEY = "";
+    private static final String API_KEY = "ece8f3c084bf15aef779da23422b4aab";
     private static final String TAG = "TEST_LOG";
-    Weather weather;
+    WeatherData weatherData;
     //faeze's chunks
     NavigationView navView;
     // TODO: 17/01/2019 use Reverse geocoding to get persian name
-    private String CITY_NAME = "tehran";
+    private String CITY_NAME = "tesafasehran";
     private TextView cityNameTextView;
     private TextView tempTextView;
     private TextView maxTempTextView;
@@ -62,10 +57,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText searchCityEditText;
     private DrawerLayout mDrawerLayout;
 
+    private OpenWeatherService service;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme_Launcher);
         super.onCreate(savedInstanceState);
-
 
         //hide status bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -78,11 +75,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setListeners();
 
-        weather = new Weather();
+        configureNavigationDrawer();
+
+        weatherData = new WeatherData();
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.build();
+
+        service = retrofit.create(OpenWeatherService.class);
 
         setWeather();
 
-        configureNavigationDrawer();
+
     }
 
     @Override
@@ -94,12 +101,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 searchPlot.setVisibility(View.VISIBLE);
                 //show soft keyboard
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                Log.i(TAG, "onClick: add city clicked");
                 break;
             case R.id.search_city_button:
-                Log.i(TAG, "onClick: search city clicked");
                 if (!searchCityEditText.getText().toString().equals("")) {
-                    Log.i(TAG, "search city text " + searchCityEditText.getText().toString());
                     CITY_NAME = searchCityEditText.getText().toString();
                     searchPlot.setVisibility(View.INVISIBLE);
                     setWeather();
@@ -151,7 +155,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
                         super.onPermissionGranted(response);
-                        new DownloadWeatherCondition().execute();
+
+                        Call<WeatherData> call = service.weatherCall(CITY_NAME, API_KEY);
+
+                        call.enqueue(new Callback<WeatherData>() {
+                            @Override
+                            public void onResponse(Call<WeatherData> call, Response<WeatherData> response) {
+                                weatherData = response.body();
+                                if (response.body() != null) {
+                                    setView();
+                                } else {
+                                    // TODO: 03/02/2019 set to works with response.errorBody
+                                    Toast.makeText(MainActivity.this, "city not found", Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<WeatherData> call, Throwable t) {
+                                Toast.makeText(MainActivity.this, "Connecting field", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
                     }
 
                     @Override
@@ -160,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         PermissionListener dialogPermissionListener = DialogOnDeniedPermissionListener.Builder
                                 .withContext(MainActivity.this)
                                 .withTitle("Internet Permission")
-                                .withMessage("We Need Internet to Get the Weather Data")
+                                .withMessage("We Need Internet to Get the WeatherData Data")
                                 .withButtonText("Ok")
                                 .build();
                     }
@@ -188,46 +212,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         closeSearchPlotImageButton = findViewById(R.id.ImageButton_close_search_plot);
         drawerHamburgerImageButton = findViewById(R.id.imageButton_drawer_hamburger);
         backGroundImageView = findViewById(R.id.imageView_background);
-        mDrawerLayout = findViewById(R.id.drawer);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         navView = findViewById(R.id.navigation);
     }
 
-    public void parseJSON(String stringResponse) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(stringResponse);
-
-            //weather info includes: id, main, description, icon
-            String weatherInfo = jsonObject.getString("weather");
-            JSONArray array = new JSONArray(weatherInfo);
-            for (int i = 0; i < array.length(); i++) {
-                //get the id of climate condition
-                weather.setWeatherConditionID(array.getJSONObject(i).getInt("id"));
-                weather.setWeatherCondition(array.getJSONObject(i).getString("main"));
-            }
-
-            weather.setCityName(jsonObject.getString("name"));
-
-            //main info include temp, pressure, humidity, temp_min, temp_max
-            String mainInfo = jsonObject.getString("main");
-            weather.setTemp(Double.parseDouble(new JSONObject(mainInfo).getString("temp")));
-            weather.setMaxTemp(Double.parseDouble(new JSONObject(mainInfo).getString("temp_max")));
-            weather.setMinTemp(Double.parseDouble(new JSONObject(mainInfo).getString("temp_min")));
-
-        } catch (Exception e) {
-            Toast.makeText(this, "An Error Occurred.", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
-    }
-
+    @SuppressLint("SetTextI18n")
     public void setView() {
 
-        cityNameTextView.setText(weather.getCityName());
-        tempTextView.setText(String.valueOf((int) weather.getTemp() - 273) + "°");
-        maxTempTextView.setText(String.valueOf((int) weather.getMaxTemp() - 273));
-        minTempTextView.setText(String.valueOf((int) weather.getMinTemp() - 273));
+        mDrawerLayout.setVisibility(View.VISIBLE);
+        cityNameTextView.setText(weatherData.getCityName());
+        tempTextView.setText(String.valueOf((int) weatherData.getMainCondition().getTemperature() - 273) + "°");
+        maxTempTextView.setText(String.valueOf((int) weatherData.getMainCondition().getTemp_max() - 273));
+        minTempTextView.setText(String.valueOf((int) weatherData.getMainCondition().getTemp_min() - 273));
 
-        switch (weather.getWeatherConditionID()/100){
+        switch (weatherData.getWeatherList().get(0).getId() / 100) {
             case 2:
                 backGroundImageView.setImageDrawable(getDrawable(R.drawable.thunderstorm));
                 break;
@@ -248,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
 
-        switch (weather.getWeatherConditionID()) {
+        switch (weatherData.getWeatherList().get(0).getId()) {
             case 200:
                 climateConditionTextView.setText("بارش خفیف همراه با رعد و برق");
                 climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_thunderstorm));
@@ -475,52 +473,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
-    public class DownloadWeatherCondition extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-
-            StringBuilder result = new StringBuilder();
-
-            try {
-                // TODO: 20/01/2019 use volley or retrofit instead
-                URL url = new URL("https://api.openweathermap.org/data/2.5/weather?q=" + CITY_NAME + "&appid=" + API_KEY);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                InputStream in = urlConnection.getInputStream();
-                InputStreamReader reader = new InputStreamReader(in);
-
-                int data = reader.read();
-
-                while (data != -1) {
-
-                    char current = (char) data;
-                    result.append(current);
-                    data = reader.read();
-
-                }
-
-                return result.toString();
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            } catch (Exception e) {
-                Toast.makeText(MainActivity.this, "Can't find this city", Toast.LENGTH_SHORT).show();
-            }
-
-            return null;
-
-        }
-
-        @Override
-        protected void onPostExecute(String res) {
-            super.onPostExecute(res);
-            parseJSON(res);
-            setView();
-        }
-
-    }
-
 
 }

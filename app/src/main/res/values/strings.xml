@@ -6,7 +6,6 @@
     <string name="defaultMaxTemp">30°</string>
     <string name="defaultMinTemp">20°</string>
     <string name="imageButton_menu_description">this icon is for opening the drawer bar</string>
-    <string name="defaultCityName">اصفهان</string>
     <string name="imageButton_addCity_description">this button add cities in your atmosphere</string>
     <string name="imageView_climateCondition_description">air condition image</string>
     <string name="appNameFarsi">اتمسفر</string>
