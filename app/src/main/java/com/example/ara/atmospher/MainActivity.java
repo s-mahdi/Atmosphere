@@ -4,11 +4,18 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
+
+import com.example.ara.atmospher.functions.Background;
+import com.example.ara.atmospher.functions.Condition;
+import com.example.ara.atmospher.functions.Icon;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +23,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import androidx.appcompat.widget.AppCompatImageView;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,10 +48,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String API_KEY = "ece8f3c084bf15aef779da23422b4aab";
     private static final String TAG = "TEST_LOG";
     WeatherData weatherData;
-    //faeze's chunks
     NavigationView navView;
     // TODO: 17/01/2019 use Reverse geocoding to get persian name
-    private String CITY_NAME = "tesafasehran";
+    private String CITY_NAME = "tehran";
     private TextView cityNameTextView;
     private TextView tempTextView;
     private TextView maxTempTextView;
@@ -56,6 +65,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View searchPlot;
     private EditText searchCityEditText;
     private DrawerLayout mDrawerLayout;
+
+    private Icon icon;
+    private Condition condition;
+    private Background background;
 
     private OpenWeatherService service;
 
@@ -76,6 +89,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setListeners();
 
         configureNavigationDrawer();
+
+        icon = new Icon();
+        condition = new Condition();
+        background = new Background();
 
         weatherData = new WeatherData();
 
@@ -120,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.imageButton_drawer_hamburger:
-                mDrawerLayout.openDrawer(Gravity.END);
+                mDrawerLayout.openDrawer(GravityCompat.END);
                 break;
 
 
@@ -162,17 +179,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onResponse(Call<WeatherData> call, Response<WeatherData> response) {
                                 weatherData = response.body();
+                                Log.i(TAG, "onResponse: " + String.valueOf(response.body()));
                                 if (response.body() != null) {
                                     setView();
                                 } else {
                                     // TODO: 03/02/2019 set to works with response.errorBody
-                                    Toast.makeText(MainActivity.this, "city not found", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MainActivity.this, "شهر یافت نشد", Toast.LENGTH_LONG).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<WeatherData> call, Throwable t) {
-                                Toast.makeText(MainActivity.this, "Connecting field", Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, "اتصال با سرور برقرار نیست", Toast.LENGTH_LONG).show();
                             }
                         });
 
@@ -218,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint("SetTextI18n")
     public void setView() {
+        int id = weatherData.getWeatherList().get(0).getId();
 
         mDrawerLayout.setVisibility(View.VISIBLE);
         cityNameTextView.setText(weatherData.getCityName());
@@ -225,253 +244,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         maxTempTextView.setText(String.valueOf((int) weatherData.getMainCondition().getTemp_max() - 273));
         minTempTextView.setText(String.valueOf((int) weatherData.getMainCondition().getTemp_min() - 273));
 
-        switch (weatherData.getWeatherList().get(0).getId() / 100) {
-            case 2:
-                backGroundImageView.setImageDrawable(getDrawable(R.drawable.thunderstorm));
-                break;
-            case 3:
-                backGroundImageView.setImageDrawable(getDrawable(R.drawable.drizzle));
-                break;
-            case 5:
-                backGroundImageView.setImageDrawable(getDrawable(R.drawable.rainy_3));
-                break;
-            case 6:
-                backGroundImageView.setImageDrawable(getDrawable(R.drawable.snowy_2));
-                break;
-            case 7:
-                backGroundImageView.setImageDrawable(getDrawable(R.drawable.foggy_2));
-                break;
-            case 8:
-                backGroundImageView.setImageDrawable(getDrawable(R.drawable.sunny));
-                break;
-        }
-
-        switch (weatherData.getWeatherList().get(0).getId()) {
-            case 200:
-                climateConditionTextView.setText("بارش خفیف همراه با رعد و برق");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_thunderstorm));
-                break;
-            case 201:
-                climateConditionTextView.setText("بارش  همراه با رعد و برق");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_thunderstorm));
-                break;
-            case 202:
-                climateConditionTextView.setText("بارش سنکین همراه با رعد و برق");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_thunderstorm));
-                break;
-            case 210:
-                climateConditionTextView.setText("رعد و برق خفیف");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_thunderstorm));
-                break;
-            case 211:
-                climateConditionTextView.setText("رعد و برق");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_thunderstorm));
-                break;
-            case 212:
-                climateConditionTextView.setText("رعد و برق شدید");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_thunderstorm));
-                break;
-            case 221:
-                climateConditionTextView.setText("رعد و برق پراکنده");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_thunderstorm));
-                break;
-            case 230:
-                climateConditionTextView.setText("بارش ریز خفیف همراه با رعد و برق");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_thunderstorm));
-                break;
-            case 231:
-                climateConditionTextView.setText("بارش ریز همراه با رعد و برق");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_thunderstorm));
-                break;
-            case 232:
-                climateConditionTextView.setText("بارش ریز شدید همراه با رعد و برق");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_thunderstorm));
-                break;
-
-            case 300:
-                climateConditionTextView.setText("بارش ریز خفیف");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_showr_rain));
-                break;
-            case 301:
-                climateConditionTextView.setText("بارش ریز");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_showr_rain));
-                break;
-            case 302:
-                climateConditionTextView.setText("بارش ریز سنگین");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_showr_rain));
-                break;
-            case 310:
-                climateConditionTextView.setText("بارش سبک");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_showr_rain));
-                break;
-            case 311:
-                climateConditionTextView.setText("بارش");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_showr_rain));
-                break;
-            case 312:
-                climateConditionTextView.setText("بارش سنگین");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_showr_rain));
-                break;
-            case 313:
-                climateConditionTextView.setText("بارش ریز همراه با رگبار");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_showr_rain));
-                break;
-            case 314:
-                climateConditionTextView.setText("بارش ریز همراه با رگبار سنگین");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_showr_rain));
-                break;
-            case 321:
-                climateConditionTextView.setText("بارش ریز رگباری");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_showr_rain));
-                break;
-
-            case 500:
-                climateConditionTextView.setText("بارش سبک");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_rain));
-                break;
-            case 501:
-                climateConditionTextView.setText("بارش معتدل");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_rain));
-                break;
-            case 502:
-                climateConditionTextView.setText("بارش شدید");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_rain));
-                break;
-            case 503:
-                climateConditionTextView.setText("بارش بسیار شدید");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_rain));
-                break;
-            case 504:
-                climateConditionTextView.setText("بارش مفرط");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_rain));
-                break;
-            case 511:
-                climateConditionTextView.setText("بارش منجمد");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_snow));
-                break;
-            case 520:
-                climateConditionTextView.setText("بارش رگباری سبک");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_rain));
-                break;
-            case 521:
-                climateConditionTextView.setText("بارش رگباری");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_rain));
-                break;
-            case 522:
-                climateConditionTextView.setText("بارش رگباری شدید");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_rain));
-                break;
-            case 531:
-                climateConditionTextView.setText("بارش  رگباری پراکنده");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_rain));
-                break;
-
-            case 600:
-                climateConditionTextView.setText("بارش برف سبک");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_snow));
-                break;
-            case 601:
-                climateConditionTextView.setText("بارش برف");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_snow));
-                break;
-            case 602:
-                climateConditionTextView.setText("بارش برف سنگین");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_snow));
-                break;
-            case 611:
-                climateConditionTextView.setText("بارش برف و باران");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_snow));
-                break;
-            case 612:
-                climateConditionTextView.setText("بارش برف و باران رگباری");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_snow));
-                break;
-            case 615:
-                climateConditionTextView.setText("بارش برف و باران سبک");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_snow));
-                break;
-            case 616:
-                climateConditionTextView.setText("بارش برف و باران");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_snow));
-                break;
-            case 620:
-                climateConditionTextView.setText("بارش برف رگباری سبک");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_snow));
-                break;
-            case 621:
-                climateConditionTextView.setText("بارش برف رگباری");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_snow));
-                break;
-            case 622:
-                climateConditionTextView.setText("بارش برف رگباری سنگین");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_snow));
-                break;
-
-            case 701:
-                climateConditionTextView.setText("غبارآلود");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_mist));
-                break;
-            case 711:
-                climateConditionTextView.setText("دود");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_mist));
-                break;
-            case 721:
-                climateConditionTextView.setText("مه رقیق");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_mist));
-                break;
-            case 731:
-                climateConditionTextView.setText("گرد باد شن");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_mist));
-                break;
-            case 741:
-                climateConditionTextView.setText("مه غلیظ");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_mist));
-                break;
-            case 751:
-                climateConditionTextView.setText("شن");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_mist));
-                break;
-            case 761:
-                climateConditionTextView.setText("گرد و غبار");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_mist));
-                break;
-            case 762:
-                climateConditionTextView.setText("خاکستر آتشفشانی");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_mist));
-                break;
-            case 771:
-                climateConditionTextView.setText("توفان");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_mist));
-                break;
-            case 781:
-                climateConditionTextView.setText("گردباد");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_mist));
-                break;
-
-            case 800:
-                climateConditionTextView.setText("صاف");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_clear_sky));
-                break;
-            case 801:
-                climateConditionTextView.setText("اندکی ابری");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_few_clouds));
-                break;
-            case 802:
-                climateConditionTextView.setText("ابرهای پراکنده");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_scattered_clouds));
-                break;
-            case 803:
-                climateConditionTextView.setText("ابرهای شکسته");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_broken_clouds));
-                break;
-            case 804:
-                climateConditionTextView.setText("پوشیده از ابر");
-                climateConditionImageView.setImageDrawable(getDrawable(R.drawable.ic_broken_clouds));
-                break;
-
-        }
-
-
+        climateConditionTextView.setText(condition.getCondition(id));
+        climateConditionImageView.setImageDrawable(getDrawable(icon.getIcon(id)));
+        backGroundImageView.setImageDrawable(getDrawable(background.getBackground(id)));
     }
 
 }
