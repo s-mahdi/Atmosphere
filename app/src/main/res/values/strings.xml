@@ -23,4 +23,5 @@
     <string name="guide">راهنما</string>
     <string name="give_score">امتیاز دهید</string>
     <string name="invite_friends">دعوت دوستان</string>
+    <string name="bg_info">background image of main page</string>
 </resources>
