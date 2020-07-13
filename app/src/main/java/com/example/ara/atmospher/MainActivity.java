@@ -3,19 +3,10 @@ package com.example.ara.atmospher;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.example.ara.atmospher.functions.Background;
-import com.example.ara.atmospher.functions.Condition;
-import com.example.ara.atmospher.functions.Icon;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -23,14 +14,21 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
-import androidx.appcompat.widget.AppCompatImageView;
-
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+
 import com.example.ara.atmospher.Interfaces.OpenWeatherService;
+import com.example.ara.atmospher.events.ClickManager;
+import com.example.ara.atmospher.functions.Background;
+import com.example.ara.atmospher.functions.Condition;
+import com.example.ara.atmospher.functions.Icon;
+import com.example.ara.atmospher.functions.ViewManager;
+import com.google.android.material.navigation.NavigationView;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
@@ -38,32 +36,39 @@ import com.karumi.dexter.listener.single.BasePermissionListener;
 import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import kotlin.Unit;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import static com.example.ara.atmospher.functions.StoreageKt.syncStorage;
+
+public class MainActivity extends AppCompatActivity {
     private static final String API_KEY = "ece8f3c084bf15aef779da23422b4aab";
     private static final String TAG = "TEST_LOG";
     WeatherData weatherData;
     NavigationView navView;
     // TODO: 17/01/2019 use Reverse geocoding to get persian name
-    private String CITY_NAME = "tehran";
+    private String CITY_NAME;
+
     private TextView cityNameTextView;
     private TextView tempTextView;
     private TextView maxTempTextView;
     private TextView minTempTextView;
     private TextView climateConditionTextView;
+
     private ImageView climateConditionImageView;
+    private ImageView backGroundImageView;
+
     private ImageButton addCityImageButton;
-    private ImageButton searchCityImageButton;
+    private ImageButton searchButton;
     private ImageButton closeSearchPlotImageButton;
     private ImageButton drawerHamburgerImageButton;
-    private ImageView backGroundImageView;
-    private View searchPlot;
-    private EditText searchCityEditText;
+
+    private View searchBar;
+    private EditText searchInput; // used for city name
     private DrawerLayout mDrawerLayout;
 
     private Icon icon;
@@ -71,6 +76,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Background background;
 
     private OpenWeatherService service;
+    private InputMethodManager imm;
+
+    private ViewManager viewManager;
+    private SharedPreferences sharedPref;
+    private ClickManager clickManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,17 +94,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
-        getViews();
+        initializer();
 
-        setListeners();
+        setEvents();
+
+        CITY_NAME = syncStorage(sharedPref);
 
         configureNavigationDrawer();
-
-        icon = new Icon();
-        condition = new Condition();
-        background = new Background();
-
-        weatherData = new WeatherData();
 
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.openweathermap.org/")
@@ -104,44 +110,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         service = retrofit.create(OpenWeatherService.class);
 
-        setWeather();
-
+        handleRequest(CITY_NAME);
 
     }
 
-    @Override
-    public void onClick(View view) {
-        //uses for opening and closing soft keyboard
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        switch (view.getId()) {
-            case R.id.imageButton_addCity:
-                searchPlot.setVisibility(View.VISIBLE);
-                //show soft keyboard
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                break;
-            case R.id.search_city_button:
-                if (!searchCityEditText.getText().toString().equals("")) {
-                    CITY_NAME = searchCityEditText.getText().toString();
-                    searchPlot.setVisibility(View.INVISIBLE);
-                    setWeather();
+    private Unit onSearch() {
+        String searchValue = searchInput.getText().toString();
+        if (!searchValue.isEmpty()) {
+            viewManager.toggleView(searchBar);
+            handleRequest(searchValue);
 
-                    //hide soft keyboard
-                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            //hide soft keyboard
+            viewManager.toggleSoftKeyboard(imm);
 
-                    searchCityEditText.setText("");
-                } else Toast.makeText(this, "Field is empty", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.ImageButton_close_search_plot:
-                searchPlot.setVisibility(View.INVISIBLE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                break;
+            searchInput.setText("");
+        } else Toast.makeText(this, "متنی وارد نشده!", Toast.LENGTH_SHORT).show();
 
-            case R.id.imageButton_drawer_hamburger:
-                mDrawerLayout.openDrawer(GravityCompat.END);
-                break;
+        return Unit.INSTANCE;
 
-
-        }
     }
 
     private void configureNavigationDrawer() {
@@ -165,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void setWeather() {
+    private void handleRequest(final String cityName) {
         Dexter.withActivity(MainActivity.this)//get and set permissions
                 .withPermission(Manifest.permission.INTERNET)
                 .withListener(new BasePermissionListener() {
@@ -173,15 +159,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onPermissionGranted(PermissionGrantedResponse response) {
                         super.onPermissionGranted(response);
 
-                        Call<WeatherData> call = service.weatherCall(CITY_NAME, API_KEY);
+                        Call<WeatherData> call = service.weatherCall(cityName, API_KEY);
 
                         call.enqueue(new Callback<WeatherData>() {
                             @Override
                             public void onResponse(Call<WeatherData> call, Response<WeatherData> response) {
                                 weatherData = response.body();
-                                Log.i(TAG, "onResponse: " + String.valueOf(response.body()));
                                 if (response.body() != null) {
                                     setView();
+                                    CITY_NAME = syncStorage(sharedPref);
                                 } else {
                                     // TODO: 03/02/2019 set to works with response.errorBody
                                     Toast.makeText(MainActivity.this, "شهر یافت نشد", Toast.LENGTH_LONG).show();
@@ -209,14 +195,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }).check();
     }
 
-    private void setListeners() {
-        addCityImageButton.setOnClickListener(this);
-        searchCityImageButton.setOnClickListener(this);
-        closeSearchPlotImageButton.setOnClickListener(this);
-        drawerHamburgerImageButton.setOnClickListener(this);
+    private void setEvents() {
+
+        addCityImageButton.setOnClickListener(clickManager);
+        searchButton.setOnClickListener(clickManager);
+        closeSearchPlotImageButton.setOnClickListener(clickManager);
+        drawerHamburgerImageButton.setOnClickListener(clickManager);
+
+        searchInput.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    viewManager.toggleView(searchBar);
+                    viewManager.toggleSoftKeyboard(imm);
+                    handleRequest(searchInput.getText().toString());
+                    searchInput.setText("");
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
-    private void getViews() {
+    private void initializer() {
+        // set views
         cityNameTextView = findViewById(R.id.textView_cityName);
         tempTextView = findViewById(R.id.textView_temperature);
         maxTempTextView = findViewById(R.id.textView_maxTemp);
@@ -224,23 +226,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         climateConditionTextView = findViewById(R.id.textView_climateCondition);
         climateConditionImageView = findViewById(R.id.imageView_climateCondition);
         addCityImageButton = findViewById(R.id.imageButton_addCity);
-        searchPlot = findViewById(R.id.searchPlot);
-        searchCityImageButton = findViewById(R.id.search_city_button);
-        searchCityEditText = findViewById(R.id.editText_search_city);
+        searchBar = findViewById(R.id.searchPlot);
+        searchButton = findViewById(R.id.search_city_button);
+        searchInput = findViewById(R.id.editText_search_city);
         closeSearchPlotImageButton = findViewById(R.id.ImageButton_close_search_plot);
         drawerHamburgerImageButton = findViewById(R.id.imageButton_drawer_hamburger);
         backGroundImageView = findViewById(R.id.imageView_background);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         navView = findViewById(R.id.navigation);
+
+
+        icon = new Icon();
+        condition = new Condition();
+        background = new Background();
+
+        weatherData = new WeatherData();
+
+        viewManager = new ViewManager();
+
+        sharedPref = this.getSharedPreferences(
+                getString(R.string.city_key), Context.MODE_PRIVATE);
+
+        clickManager = new ClickManager(this, this::onSearch);
+
     }
 
     @SuppressLint("SetTextI18n")
     public void setView() {
         int id = weatherData.getWeatherList().get(0).getId();
 
+        imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+
         mDrawerLayout.setVisibility(View.VISIBLE);
         cityNameTextView.setText(weatherData.getCityName());
-        tempTextView.setText(String.valueOf((int) weatherData.getMainCondition().getTemperature() - 273) + "°");
+        tempTextView.setText(((int) weatherData.getMainCondition().getTemperature() - 273) + "°");
         maxTempTextView.setText(String.valueOf((int) weatherData.getMainCondition().getTemp_max() - 273));
         minTempTextView.setText(String.valueOf((int) weatherData.getMainCondition().getTemp_min() - 273));
 
