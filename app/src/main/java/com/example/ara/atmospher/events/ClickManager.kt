@@ -1,6 +1,7 @@
 package com.example.ara.atmospher.events
 
 import android.app.Activity
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -8,10 +9,11 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.ara.atmospher.MainActivity
 import com.example.ara.atmospher.R
 import com.example.ara.atmospher.functions.ViewManager
 
-class ClickManager(activity: Activity, val onSearch: () -> Unit) : View.OnClickListener {
+class ClickManager(private val activity: Activity, val onSearch: () -> Unit) : View.OnClickListener {
 
     private val viewManager = ViewManager();
     private val searchBar = activity.findViewById<ConstraintLayout>(R.id.searchPlot)
@@ -23,18 +25,23 @@ class ClickManager(activity: Activity, val onSearch: () -> Unit) : View.OnClickL
 
         when (view.id) {
             R.id.imageButton_addCity -> {
-                viewManager.toggleView(searchBar)
+                viewManager.showView(searchBar)
                 searchInput.requestFocus()
                 //show soft keyboard
-                imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
+                viewManager.toggleSoftKeyboard(imm);
             }
             R.id.search_city_button -> onSearch()
             R.id.ImageButton_close_search_plot -> {
-                viewManager.toggleView(searchBar)
-                //                searchBar.setVisibility(View.INVISIBLE);
+                viewManager.hideView(searchBar)
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
             }
             R.id.imageButton_drawer_hamburger -> mDrawerLayout.openDrawer(GravityCompat.END)
+            else -> {
+                Log.i("MAMA", "onClick: ELSE IS RUNNIG")
+                viewManager.hideKeyboardFrom(activity, view)
+//                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+                viewManager.hideView(searchBar);
+            }
         }
     }
 
