@@ -37,9 +37,7 @@ class ClickManager(private val activity: Activity, val onSearch: () -> Unit) : V
             }
             R.id.imageButton_drawer_hamburger -> mDrawerLayout.openDrawer(GravityCompat.END)
             else -> {
-                Log.i("MAMA", "onClick: ELSE IS RUNNIG")
                 viewManager.hideKeyboardFrom(activity, view)
-//                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
                 viewManager.hideView(searchBar);
             }
         }
