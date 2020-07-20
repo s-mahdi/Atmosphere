@@ -5,9 +5,10 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:layoutDirection="rtl"
     android:visibility="invisible"
     tools:context=".MainActivity">
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,10 +20,7 @@
             android:id="@+id/frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
     </LinearLayout>
-
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -30,13 +28,10 @@
         tools:context=".MainActivity"
         tools:layout_editor_absoluteY="25dp">
 
-
         <!--background image -->
         <androidx.appcompat.widget.FitWindowsFrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-
             <ImageView
                 android:id="@+id/imageView_background"
                 android:layout_width="match_parent"
@@ -44,11 +39,7 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/bg_info"
                 android:scaleType="centerCrop" />
-            
-
-
         </androidx.appcompat.widget.FitWindowsFrameLayout>
-
 
         <!--gradient view  -->
         <androidx.appcompat.widget.AppCompatImageView
@@ -60,10 +51,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <!--top bar-->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout2"
+        <!--Custom tool bar bar-->
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -71,43 +62,7 @@
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageButton
-                android:id="@+id/imageButton_addCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:contentDescription="@string/imageButton_addCity_description"
-                android:padding="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_add_white_24dp" />
-
-            <TextView
-                android:id="@+id/textView_cityName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/iranian_sans"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@id/imageButton_drawer_hamburger"
-                app:layout_constraintStart_toEndOf="@id/imageButton_addCity"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/imageButton_drawer_hamburger"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:contentDescription="@string/imageButton_menu_description"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_menu_white_24dp" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <include
             android:id="@+id/searchPlot"
@@ -119,7 +74,6 @@
             android:layout_marginRight="11dp"
             android:visibility="invisible" />
 
-
         <!--climate condition box-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/box_climateCondition"
@@ -128,7 +82,7 @@
             android:layout_marginTop="64.6dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <TextView
                 android:id="@+id/textView_climateCondition"
@@ -195,7 +149,6 @@
                 app:layout_constraintStart_toEndOf="@id/imageView_upArrow"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageView_downArrow"
                 android:layout_width="wrap_content"
@@ -218,19 +171,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation"
+    <com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView
+        android:id="@+id/slider"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:layoutDirection="rtl"
-        app:headerLayout="@layout/header"
-        app:menu="@menu/drawer_items">
-
-    </com.google.android.material.navigation.NavigationView>
-
-
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true" />
 </androidx.drawerlayout.widget.DrawerLayout>
