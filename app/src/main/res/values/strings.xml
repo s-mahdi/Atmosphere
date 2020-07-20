@@ -12,6 +12,7 @@
     <string name="search_places">Search places</string>
     <string name="finds_city">finds city</string>
     <string name="search_location">جست و جوی شهر</string>
+
     <!--drawer items-->
     <string name="refresh">refresh</string>
     <string name="Open">Open</string>
