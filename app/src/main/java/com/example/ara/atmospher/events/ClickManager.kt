@@ -35,12 +35,11 @@ class ClickManager(private val activity: Activity, val onSearch: () -> Unit) : V
                 viewManager.hideView(searchBar)
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
             }
-            R.id.imageButton_drawer_hamburger -> mDrawerLayout.openDrawer(GravityCompat.END)
+            R.id.imageButton_drawer_hamburger -> mDrawerLayout.openDrawer(GravityCompat.START)
             else -> {
                 viewManager.hideKeyboardFrom(activity, view)
                 viewManager.hideView(searchBar);
             }
         }
     }
-
 }
