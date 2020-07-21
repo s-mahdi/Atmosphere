@@ -27,5 +27,6 @@
     <string name="bg_info">background image of main page</string>
 
     <string name="city_key">city_key</string>
+    <string name="syncing">در حال دریافت اطلاعات</string>
 
 </resources>

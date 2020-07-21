@@ -7,15 +7,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.ara.atmospher.R
 import com.example.ara.atmospher.model.WeatherData
 import com.mikepenz.materialdrawer.holder.ImageHolder
 import com.mikepenz.materialdrawer.holder.StringHolder
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
-import com.mikepenz.materialdrawer.model.interfaces.withIdentifier
-import com.mikepenz.materialdrawer.model.interfaces.withName
 import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView
 
 class ViewManager {
@@ -39,14 +36,17 @@ class ViewManager {
     fun setWeatherView(weatherData: WeatherData, activity: Activity) {
         val bg: ImageView = activity.findViewById(R.id.imageView_background)
         val city: TextView = activity.findViewById(R.id.textView_cityName)
-        val temp: TextView = activity.findViewById(R.id.textView_temperature)
-        val minTemp: TextView = activity.findViewById(R.id.textView_minTemp)
-        val maxTemp: TextView = activity.findViewById(R.id.textView_maxTemp)
+        val temp: TextView = activity.findViewById(R.id.temp)
+        val minTemp: TextView = activity.findViewById(R.id.min_temp)
+        val maxTemp: TextView = activity.findViewById(R.id.max_temp)
         val condition: TextView = activity.findViewById(R.id.textView_climateCondition)
         val icon: ImageView = activity.findViewById(R.id.imageView_climateCondition)
-        val layout: DrawerLayout = activity.findViewById(R.id.drawer_layout)
+        val wrapper: ConstraintLayout = activity.findViewById(R.id.viewWrapper)
+        val loaderLayout: ConstraintLayout = activity.findViewById(R.id.loaderLayout)
 
-        layout.visibility = View.VISIBLE
+        wrapper.visibility = View.VISIBLE
+        loaderLayout.visibility = View.GONE
+
         val id = weatherData.weatherList[0].id
         bg.setImageDrawable(activity.getDrawable(getBackground(id)))
         city.text = weatherData.cityName
@@ -55,7 +55,6 @@ class ViewManager {
         maxTemp.text = (weatherData.mainCondition.temp_max.toInt() - 273).toString().plus("°")
         condition.text = getCondition(id)
         icon.setImageDrawable(activity.getDrawable(getIcon(id)))
-
 
     }
 
