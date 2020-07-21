@@ -8,7 +8,7 @@ import com.example.ara.atmospher.R
 import com.example.ara.atmospher.functions.ViewManager
 
 class KeyManager(activity: Activity, val onSubmit: () -> Unit) : View.OnKeyListener {
-    private val searchBar: View = activity.findViewById(R.id.searchPlot)
+    private val searchBar: View = activity.findViewById(R.id.searchbar)
     private val input: EditText = activity.findViewById(R.id.editText_search_city)
 
     private val viewManager = ViewManager()

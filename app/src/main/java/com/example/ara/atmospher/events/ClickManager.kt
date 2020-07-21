@@ -1,24 +1,21 @@
 package com.example.ara.atmospher.events
 
 import android.app.Activity
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.example.ara.atmospher.MainActivity
 import com.example.ara.atmospher.R
 import com.example.ara.atmospher.functions.ViewManager
 
 class ClickManager(private val activity: Activity, val onSearch: () -> Unit) : View.OnClickListener {
 
     private val viewManager = ViewManager();
-    private val searchBar = activity.findViewById<ConstraintLayout>(R.id.searchPlot)
+    private val searchBar = activity.findViewById<ConstraintLayout>(R.id.searchbar)
     private val searchInput = activity.findViewById<EditText>(R.id.editText_search_city);
-    private val mDrawerLayout = activity.findViewById<DrawerLayout>(R.id.drawer_layout);
+    private val mDrawerLayout = activity.findViewById<DrawerLayout>(R.id.layout);
     private val imm: InputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager;
 
     override fun onClick(view: View) {

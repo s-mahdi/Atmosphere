@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //hide status bar
-//        hideStatusBar(this);
+        hideStatusBar(this);
         setContentView(R.layout.activity_main)
 
         initializer()
@@ -91,13 +91,13 @@ class MainActivity : AppCompatActivity() {
         // set views
         climateConditionImageView = findViewById(R.id.imageView_climateCondition)
         addCityImageButton = findViewById(R.id.imageButton_addCity)
-        searchBar = findViewById(R.id.searchPlot)
+        searchBar = findViewById(R.id.searchbar)
         searchButton = findViewById(R.id.search_city_button)
         searchInput = findViewById(R.id.editText_search_city)
         closeSearchPlotImageButton = findViewById(R.id.ImageButton_close_search_plot)
         drawerHamburgerImageButton = findViewById(R.id.imageButton_drawer_hamburger)
         backGroundImageView = findViewById(R.id.imageView_background)
-        mDrawerLayout = findViewById(R.id.drawer_layout)
+        mDrawerLayout = findViewById(R.id.layout)
         viewManager = ViewManager()
         sharedPref = getSharedPreferences(
                 getString(R.string.city_key), Context.MODE_PRIVATE)
