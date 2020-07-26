@@ -28,5 +28,18 @@
 
     <string name="city_key">city_key</string>
     <string name="syncing">در حال دریافت اطلاعات</string>
+    <string name="_30">30</string>
+    <string name="hamedan">همدان</string>
+
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a condimentum augue. Vivamus tempor dolor et velit rhoncus, sit amet finibus urna commodo. Suspendisse ultricies urna a erat gravida, lacinia dictum nulla pretium. Aliquam sed diam hendrerit, elementum metus egestas, volutpat odio. In sit amet mauris eros. Praesent lacinia lorem sed urna feugiat condimentum. Sed pretium elit eu condimentum semper. Vestibulum accumsan felis id ligula blandit, porttitor gravida augue pulvinar. Morbi lacinia arcu velit, eget iaculis metus eleifend at. Integer mollis ullamcorper neque. Mauris fringilla molestie posuere. Vivamus pharetra odio tellus, nec tempus velit tincidunt vitae. Proin semper neque at ante hendrerit, non mattis mi varius. Pellentesque sodales diam a dolor egestas mollis.
+
+Suspendisse eros neque, faucibus id facilisis sit amet, lacinia aliquam magna. Morbi porta, arcu placerat posuere tempor, diam libero elementum ipsum, sit amet scelerisque urna risus a nulla. Nulla nibh risus, cursus sed ante eu, viverra tincidunt sapien. Etiam vulputate mi at felis condimentum tincidunt. Nullam bibendum congue iaculis. Aliquam sed ipsum in nibh luctus egestas. Etiam eu massa euismod, convallis ante in, ultricies odio. Aliquam faucibus vulputate eros, vel pulvinar nisl mollis eu. Sed sed commodo leo. Nunc malesuada, leo eu sodales dictum, nibh mi pellentesque erat, eu tempor felis risus quis nulla. Aliquam blandit, turpis ut fermentum porttitor, est mi lacinia lectus, vel gravida ex eros eleifend lacus. Nullam vel metus a turpis hendrerit iaculis eu eget leo. Praesent dolor nulla, vulputate vitae convallis quis, vestibulum eu erat. Maecenas viverra, elit vitae sodales tempor, est diam dictum erat, ullamcorper maximus nisi velit sed tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ullamcorper sapien sagittis lectus efficitur efficitur.
+
+Suspendisse eget arcu nec lacus ultricies interdum ac sed risus. Cras venenatis, nibh sit amet dapibus viverra, purus nunc malesuada eros, in placerat ex erat eget ante. Sed tempor vulputate lobortis. Etiam id finibus ante, tincidunt tincidunt nunc. Vivamus non porttitor ante. Curabitur vel neque posuere, tincidunt sapien ut, faucibus justo. Sed a congue orci. Phasellus tincidunt in nunc sit amet porta. Suspendisse vel nisi porttitor, interdum sapien eget, fringilla quam. Fusce aliquam maximus imperdiet. Nam aliquam euismod efficitur. Donec sollicitudin luctus sodales. Aenean auctor lacus eu leo molestie iaculis. Phasellus blandit molestie nunc, vitae pretium purus iaculis sit amet. Aenean molestie sed enim ut accumsan.
+
+Proin hendrerit tempor augue, a interdum nulla semper eu. Maecenas vitae eros leo. Vivamus condimentum interdum sodales. Aenean ut finibus mauris. Ut convallis est ante, id sagittis lorem ornare elementum. Phasellus mattis ante nisl, at semper tellus cursus at. Nullam nec sem ac dui hendrerit facilisis eu vitae tellus. Nulla facilisi. Mauris leo urna, congue a sollicitudin aliquet, laoreet in libero. Praesent ornare, neque et semper dapibus, metus sapien tincidunt nisl, ut fringilla purus metus ut sem. Mauris condimentum dui non nibh mollis egestas. Nunc posuere auctor odio non mollis.
+    </string>
+    <string name="forecast">پیش‌بینی</string>
+    <string name="forecast_icon">forecast icon</string>
 
 </resources>
