@@ -12,11 +12,11 @@ import com.example.ara.atmospher.functions.ViewManager
 
 class ClickManager(private val activity: Activity, val onSearch: () -> Unit) : View.OnClickListener {
 
-    private val viewManager = ViewManager();
+    private val viewManager = ViewManager()
     private val searchBar = activity.findViewById<ConstraintLayout>(R.id.searchbar)
-    private val searchInput = activity.findViewById<EditText>(R.id.editText_search_city);
-    private val mDrawerLayout = activity.findViewById<DrawerLayout>(R.id.layout);
-    private val imm: InputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager;
+    private val searchInput = activity.findViewById<EditText>(R.id.editText_search_city)
+    private val mDrawerLayout = activity.findViewById<DrawerLayout>(R.id.drawerLayout)
+    private val imm: InputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
 
     override fun onClick(view: View) {
 
@@ -25,7 +25,7 @@ class ClickManager(private val activity: Activity, val onSearch: () -> Unit) : V
                 viewManager.showView(searchBar)
                 searchInput.requestFocus()
                 //show soft keyboard
-                viewManager.toggleSoftKeyboard(imm);
+                viewManager.toggleSoftKeyboard(imm)
             }
             R.id.search_city_button -> onSearch()
             R.id.ImageButton_close_search_plot -> {
@@ -35,7 +35,7 @@ class ClickManager(private val activity: Activity, val onSearch: () -> Unit) : V
             R.id.imageButton_drawer_hamburger -> mDrawerLayout.openDrawer(GravityCompat.START)
             else -> {
                 viewManager.hideKeyboardFrom(activity, view)
-                viewManager.hideView(searchBar);
+                viewManager.hideView(searchBar)
             }
         }
     }
