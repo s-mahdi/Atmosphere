@@ -43,8 +43,12 @@ class ViewManager {
         val icon: ImageView = activity.findViewById(R.id.imageView_climateCondition)
         val wrapper: ConstraintLayout = activity.findViewById(R.id.viewWrapper)
         val loaderLayout: ConstraintLayout = activity.findViewById(R.id.loaderLayout)
+        val backgroundWrapper: ConstraintLayout = activity.findViewById(R.id.backgroundWrapper)
+        val barsWrapper: ConstraintLayout = activity.findViewById(R.id.barsWrapper)
 
         wrapper.visibility = View.VISIBLE
+        backgroundWrapper.visibility = View.VISIBLE
+        barsWrapper.visibility = View.VISIBLE
         loaderLayout.visibility = View.GONE
 
         val id = weatherData.weatherList[0].id
