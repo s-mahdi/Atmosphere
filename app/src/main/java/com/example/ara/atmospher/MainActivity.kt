@@ -8,6 +8,7 @@ import android.view.View.OnFocusChangeListener
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -56,7 +57,10 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         viewModel.weatherDate.observe(this, Observer {
-            viewManager?.setWeatherView(it, this)
+            if (it != null) {
+                viewManager?.setWeatherView(it, this)
+            }
+            else Toast.makeText(this, " پیدا نشد!", Toast.LENGTH_SHORT).show()
         })
 
         viewModel.setCityName("yazd")

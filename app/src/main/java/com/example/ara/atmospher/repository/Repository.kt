@@ -1,6 +1,9 @@
 package com.example.ara.atmospher.repository
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
+import com.example.ara.atmospher.MainActivity
 import com.example.ara.atmospher.model.WeatherData
 import com.example.ara.atmospher.retrofit.RetrofitClient
 import kotlinx.coroutines.*
@@ -12,17 +15,22 @@ object Repository {
     var job: CompletableJob? = null
     private const val API_KEY = "ece8f3c084bf15aef779da23422b4aab"
 
-    fun getWeather(cityName: String): LiveData<WeatherData> {
+    fun getWeather(cityName: String): LiveData<WeatherData?> {
         job = Job()
-        return object : LiveData<WeatherData>() {
+        return object : LiveData<WeatherData?>() {
             override fun onActive() {
                 super.onActive()
                 job?.let { theJob ->
                     CoroutineScope(IO + theJob).launch {
                         val weatherData = RetrofitClient.apiService.getWeather(cityName, API_KEY)
                         withContext(Main) {
-                            value = weatherData
-                            theJob.complete()
+                            if (weatherData.isSuccessful) {
+                                value = weatherData.body()
+                                theJob.complete()
+                            } else {
+                                value = null
+                                theJob.cancel()
+                            }
                         }
                     }
                 }

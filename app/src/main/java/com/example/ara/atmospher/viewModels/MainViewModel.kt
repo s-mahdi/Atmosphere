@@ -11,7 +11,7 @@ class MainViewModel : ViewModel() {
     private val _cityName: MutableLiveData<String> = MutableLiveData()
 
     // whenever `_cityName` changed run the `getWeather` from Repository
-    val weatherDate: LiveData<WeatherData> = Transformations
+    val weatherDate: LiveData<WeatherData?> = Transformations
             .switchMap(_cityName) { cityName ->
                 Repository.getWeather(cityName)
             }
