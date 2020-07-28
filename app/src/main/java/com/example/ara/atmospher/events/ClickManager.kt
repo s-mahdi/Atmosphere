@@ -12,7 +12,7 @@ import com.example.ara.atmospher.functions.ViewManager
 
 class ClickManager(private val activity: Activity, val onSearch: () -> Unit) : View.OnClickListener {
 
-    private val viewManager = ViewManager()
+    private val viewManager = ViewManager(activity)
     private val searchBar = activity.findViewById<ConstraintLayout>(R.id.searchbar)
     private val searchInput = activity.findViewById<EditText>(R.id.editText_search_city)
     private val mDrawerLayout = activity.findViewById<DrawerLayout>(R.id.drawerLayout)

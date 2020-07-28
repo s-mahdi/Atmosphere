@@ -11,7 +11,7 @@ class KeyManager(activity: Activity, val onSubmit: () -> Unit) : View.OnKeyListe
     private val searchBar: View = activity.findViewById(R.id.searchbar)
     private val input: EditText = activity.findViewById(R.id.editText_search_city)
 
-    private val viewManager = ViewManager()
+    private val viewManager = ViewManager(activity)
     private val imm: InputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
 
     override fun onKey(view: View?, p1: Int, event: KeyEvent?): Boolean {

@@ -10,7 +10,7 @@ import com.example.ara.atmospher.R
 fun onSearch (activity: Activity, callback: () -> Unit) {
     val searchInput = activity.findViewById<EditText>(R.id.editText_search_city);
     val searchBar = activity.findViewById<ConstraintLayout>(R.id.searchbar)
-    val viewManager = ViewManager();
+    val viewManager = ViewManager(activity);
     val searchValue = searchInput.text.toString()
     val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager;
 
