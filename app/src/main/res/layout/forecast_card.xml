@@ -21,70 +21,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/forecastTable"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/forecastRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="8dp"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/textView3">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-            <include
-                layout="@layout/forecast_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
-
-            <include
-                layout="@layout/forecast_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
-
-            <include
-                layout="@layout/forecast_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
-            <include
-                layout="@layout/forecast_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
-            <include
-                layout="@layout/forecast_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
-        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--    <GridLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:columnCount="4"-->
-    <!--        android:layoutDirection="rtl"-->
-    <!--        android:padding="16dp"-->
-    <!--        android:rowCount="5">-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_gravity="fill_horizontal|center_vertical"-->
-    <!--            android:gravity="center_vertical"-->
-    <!--            android:text="جمعه"-->
-    <!--            -->
-    <!--            android:textColor="@android:color/white"-->
-    <!--            android:textSize="16sp" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_gravity="fill_horizontal|center_vertical"-->
-    <!--            android:gravity="center_vertical"-->
-    <!--            android:text="جمعه"-->
-    <!--            android:textColor="@android:color/white"-->
-    <!--            android:textSize="16sp" />-->
-    <!--    </GridLayout>-->
 </androidx.cardview.widget.CardView>
 
