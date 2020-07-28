@@ -19,6 +19,8 @@ import com.example.ara.atmospher.functions.ViewManager
 import com.example.ara.atmospher.functions.hideStatusBar
 import com.example.ara.atmospher.functions.onSearch
 import com.example.ara.atmospher.functions.syncStorage
+import com.example.ara.atmospher.models.openWeather.Coord
+import com.example.ara.atmospher.models.opencage.Geometry
 import com.example.ara.atmospher.viewModels.MainViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private var sharedPref: SharedPreferences? = null
     private var clickManager: ClickManager? = null
     private var keyManager: KeyManager? = null
+    private var coord: Coord? = null
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         initializer()
 
-        viewManager?.setSlider(this);
+        viewManager?.setSlider();
 
         setEvents()
 
@@ -58,12 +61,20 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.weatherDate.observe(this, Observer {
             if (it != null) {
-                viewManager?.setWeatherView(it, this)
+                viewManager?.setWeatherView(it)
+                coord = it.coordination
+            } else Toast.makeText(this, " پیدا نشد!", Toast.LENGTH_SHORT).show()
+        })
+
+        viewModel.oneCallData.observe(this, Observer {
+            if (it != null) {
+                viewManager?.setForecastView(it)
             }
-            else Toast.makeText(this, " پیدا نشد!", Toast.LENGTH_SHORT).show()
         })
 
         viewModel.setCityName("yazd")
+
+        viewModel.setCityGeometry(Geometry(36.1436784, 49.219963))
 
         CITY_NAME = syncStorage(sharedPref!!)
     }
@@ -102,7 +113,7 @@ class MainActivity : AppCompatActivity() {
         drawerHamburgerImageButton = findViewById(R.id.imageButton_drawer_hamburger)
         backGroundImageView = findViewById(R.id.imageView_background)
         mDrawerLayout = findViewById(R.id.layout)
-        viewManager = ViewManager()
+        viewManager = ViewManager(this)
         sharedPref = getSharedPreferences(
                 getString(R.string.city_key), Context.MODE_PRIVATE)
 
