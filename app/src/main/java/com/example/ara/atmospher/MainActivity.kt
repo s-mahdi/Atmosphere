@@ -8,24 +8,20 @@ import android.view.View.OnFocusChangeListener
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.ara.atmospher.events.ClickManager
 import com.example.ara.atmospher.events.KeyManager
-import com.example.ara.atmospher.functions.ViewManager
-import com.example.ara.atmospher.functions.hideStatusBar
-import com.example.ara.atmospher.functions.onSearch
-import com.example.ara.atmospher.functions.syncStorage
-import com.example.ara.atmospher.models.openWeather.Coord
+import com.example.ara.atmospher.functions.*
 import com.example.ara.atmospher.models.opencage.Geometry
 import com.example.ara.atmospher.viewModels.MainViewModel
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
     //    var navView: NavigationView? = null
-    private var CITY_NAME: String? = null
+    private var cityName: String? = null
     private var climateConditionImageView: ImageView? = null
     private var backGroundImageView: ImageView? = null
     private var addCityImageButton: ImageButton? = null
@@ -40,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     private var sharedPref: SharedPreferences? = null
     private var clickManager: ClickManager? = null
     private var keyManager: KeyManager? = null
-    private var coord: Coord? = null
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,24 +54,32 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        viewModel.weatherDate.observe(this, Observer {
-            if (it != null) {
-                viewManager?.setWeatherView(it)
-                coord = it.coordination
-            } else Toast.makeText(this, " پیدا نشد!", Toast.LENGTH_SHORT).show()
-        })
-
         viewModel.oneCallData.observe(this, Observer {
             if (it != null) {
+                viewManager?.setWeatherView(it)
                 viewManager?.setForecastView(it)
             }
         })
 
-        viewModel.setCityName("yazd")
+        viewModel.citiesData.observe(this, Observer {
+            if (it != null) {
+                val locations = filterLocations(it.results, "city", "village")
+                if (locations.size == 1) {
+                    val location = locations[0]
+                    val locationName = location.components.city?: location.components.town?: location.components.village
+                    viewManager?.setCityView(locationName!!)
+                    viewModel.setCityGeometry(location.geometry)
+                    val map: Map<String, Geometry> = mapOf(locationName!! to locations[0].geometry)
+                    updatePreferences(this@MainActivity, "city", Gson().toJson(map))
+                } else launchLocationPickerDialog(this, locations)
+            }
+        })
 
-        viewModel.setCityGeometry(Geometry(36.1436784, 49.219963))
-
-        CITY_NAME = syncStorage(sharedPref!!)
+        val city = syncPreferences(this)
+        if (city != null) {
+            viewModel.setCityGeometry(city.values.first())
+            viewManager?.setCityView(city.keys.first())
+        } else viewModel.setCityName("tehran")
     }
 
     override fun onDestroy() {

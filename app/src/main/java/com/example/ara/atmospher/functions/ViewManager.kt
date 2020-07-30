@@ -2,6 +2,7 @@ package com.example.ara.atmospher.functions
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -12,14 +13,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ara.atmospher.R
 import com.example.ara.atmospher.adapters.ForecastRecyclerAdapter
-import com.example.ara.atmospher.models.openWeather.Current
 import com.example.ara.atmospher.models.openWeather.oneCall.Daily
 import com.example.ara.atmospher.models.openWeather.oneCall.OneCall
+import com.example.ara.atmospher.models.opencage.Result
 import com.mikepenz.materialdrawer.holder.ImageHolder
 import com.mikepenz.materialdrawer.holder.StringHolder
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView
-import java.util.ArrayList
+import java.util.*
+import kotlin.math.roundToInt
 
 class ViewManager(private val activity: Activity) {
     private val bg: ImageView = activity.findViewById(R.id.imageView_background)
@@ -55,18 +57,20 @@ class ViewManager(private val activity: Activity) {
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    fun setWeatherView(current: Current) {
+    fun setWeatherView(oneCall: OneCall) {
         wrapper.visibility = View.VISIBLE
         backgroundWrapper.visibility = View.VISIBLE
         barsWrapper.visibility = View.VISIBLE
         loaderLayout.visibility = View.GONE
 
+        val current = oneCall.current
+        val today = oneCall.daily[0]
+
         val id = current.weatherList[0].id
         bg.setImageDrawable(activity.getDrawable(getBackground(id)))
-        city.text = current.cityName
-        temp.text = (current.mainCondition.temperature.toInt() - 273).toString().plus("°")
-        minTemp.text = (current.mainCondition.temp_min.toInt() - 273).toString().plus("°")
-        maxTemp.text = (current.mainCondition.temp_max.toInt() - 273).toString().plus("°")
+        temp.text = current.temp.roundToInt().toString().plus("°")
+        minTemp.text = today.temp.min.roundToInt().toString().plus("°")
+        maxTemp.text = today.temp.max.roundToInt().toString().plus("°")
         condition.text = getCondition(id)
         icon.setImageDrawable(activity.getDrawable(getIcon(id)))
     }
@@ -96,8 +100,12 @@ class ViewManager(private val activity: Activity) {
     }
 
     fun setForecastView(oneCall: OneCall) {
-       val adapter = ForecastRecyclerAdapter(activity, oneCall.daily as ArrayList<Daily>)
+        val adapter = ForecastRecyclerAdapter(activity, oneCall.daily as ArrayList<Daily>)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
+    }
+
+    fun setCityView(cityName: String) {
+        city.text = cityName
     }
 }
