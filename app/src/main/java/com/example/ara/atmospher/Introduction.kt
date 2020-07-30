@@ -8,7 +8,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
 class Introduction : AppCompatActivity() {
-    var letsGoButton: Button? = null
+    private var letsGoButton: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val i = Intent(this@Introduction, MainActivity::class.java)
@@ -17,7 +17,7 @@ class Introduction : AppCompatActivity() {
             setContentView(R.layout.activity_introduction)
             sharedPreferences.edit().putString("isLogedIn", "true").apply()
             letsGoButton = findViewById(R.id.button_start)
-            letsGoButton.setOnClickListener(View.OnClickListener {
+            letsGoButton?.setOnClickListener(View.OnClickListener {
                 startActivity(i)
                 finish()
             })
