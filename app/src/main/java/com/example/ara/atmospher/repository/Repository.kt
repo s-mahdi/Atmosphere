@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import com.example.ara.atmospher.models.openWeather.Current
 import com.example.ara.atmospher.models.openWeather.Forecast5
 import com.example.ara.atmospher.models.openWeather.oneCall.OneCall
-import com.example.ara.atmospher.models.opencage.OpenCageResults
+import com.example.ara.atmospher.models.opencage.OpenCageResult
 import com.example.ara.atmospher.retrofit.RetrofitClient
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -86,9 +86,9 @@ object Repository {
         }
     }
 
-    fun searchCities(cityName: String): LiveData<OpenCageResults?> {
+    fun searchCities(cityName: String): LiveData<OpenCageResult?> {
         job = Job()
-        return object : LiveData<OpenCageResults?>() {
+        return object : LiveData<OpenCageResult?>() {
             override fun onActive() {
                 super.onActive()
                 job?.let { theJob ->
@@ -108,6 +108,7 @@ object Repository {
             }
         }
     }
+
 
     fun cancelJobs() {
         job?.cancel()

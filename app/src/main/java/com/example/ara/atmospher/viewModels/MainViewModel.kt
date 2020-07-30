@@ -1,5 +1,6 @@
 package com.example.ara.atmospher.viewModels
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -8,6 +9,7 @@ import com.example.ara.atmospher.models.openWeather.Current
 import com.example.ara.atmospher.models.openWeather.Forecast5
 import com.example.ara.atmospher.models.openWeather.oneCall.OneCall
 import com.example.ara.atmospher.models.opencage.Geometry
+import com.example.ara.atmospher.models.opencage.OpenCageResult
 import com.example.ara.atmospher.repository.Repository
 
 class MainViewModel : ViewModel() {
@@ -28,6 +30,11 @@ class MainViewModel : ViewModel() {
     val oneCallData: LiveData<OneCall?> = Transformations
             .switchMap(_geometry) { geometry ->
                 Repository.oneCall(geometry.lat, geometry.lng)
+            }
+
+    val citiesData: LiveData<OpenCageResult?> = Transformations
+            .switchMap(_cityName) {
+                Repository.searchCities(it)
             }
 
     fun setCityName(cityName: String) {
