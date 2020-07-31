@@ -16,8 +16,7 @@
     <include
         android:id="@+id/backgroundWrapper"
         layout="@layout/background"
-        android:visibility="invisible"
-        />
+        android:visibility="invisible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewWrapper"

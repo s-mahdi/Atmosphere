@@ -4,111 +4,125 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="100dp"
     tools:background="@android:color/holo_blue_dark"
     tools:layout_height="match_parent">
 
-    <!--climate condition box-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/box_climateCondition"
-        android:layout_width="wrap_content"
+        android:id="@+id/currentWrapper"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView_climateCondition"
+        <!--climate condition box-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/box_climateCondition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/iransans"
-            android:textColor="@android:color/white"
-            android:textSize="23sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/hamedan" />
-
-        <ImageView
-            android:id="@+id/imageView_climateCondition"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="24dp"
-            android:contentDescription="@string/imageView_climateCondition_description"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textView_climateCondition"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_few_clouds" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent">
 
-    <!--temperature-->
-    <TextView
-        android:id="@+id/temp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:textSize="112sp"
-        app:layout_constraintEnd_toEndOf="@+id/box_climateCondition"
-        app:layout_constraintStart_toStartOf="@+id/box_climateCondition"
-        app:layout_constraintTop_toBottomOf="@id/box_climateCondition"
-        tools:text="@string/_30" />
+            <TextView
+                android:id="@+id/textView_climateCondition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/vazir_medium"
+                android:textColor="@android:color/white"
+                android:textSize="23sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/hamedan" />
 
-    <!--min and max temperature box-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/box_minMaxTemperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/temp"
-        app:layout_constraintStart_toStartOf="@+id/temp"
-        app:layout_constraintTop_toBottomOf="@+id/temp">
+            <ImageView
+                android:id="@+id/imageView_climateCondition"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="24dp"
+                android:contentDescription="@string/imageView_climateCondition_description"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView_climateCondition"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_few_clouds" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!--temperature-->
         <TextView
-            android:id="@+id/min_temp"
+            android:id="@+id/temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/vazir_light"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="20" />
+            android:textSize="112sp"
+            app:layout_constraintEnd_toEndOf="@+id/box_climateCondition"
+            app:layout_constraintStart_toStartOf="@+id/box_climateCondition"
+            app:layout_constraintTop_toBottomOf="@id/box_climateCondition"
+            tools:text="۳۰" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageView_downArrow"
+        <!--min and max temperature box-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/box_minMaxTemperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/min_temp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="4dp"
-            app:srcCompat="@drawable/ic_keyboard_arrow_down_white_24dp" />
+            app:layout_constraintEnd_toEndOf="@+id/temp"
+            app:layout_constraintStart_toStartOf="@+id/temp"
+            app:layout_constraintTop_toBottomOf="@+id/temp">
 
-        <TextView
-            android:id="@+id/max_temp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imageView_downArrow"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="16dp"
-            tools:text="40" />
+            <TextView
+                android:id="@+id/min_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/vazir_light"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="20" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageView_upArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/max_temp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="4dp"
-            app:srcCompat="@drawable/ic_keyboard_arrow_up_white_24dp" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageView_downArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/min_temp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_keyboard_arrow_down_white_24dp" />
+
+            <TextView
+                android:id="@+id/max_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/vazir_light"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageView_downArrow"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="40" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageView_upArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/max_temp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_keyboard_arrow_up_white_24dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <include
         android:id="@+id/include"
@@ -116,12 +130,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/box_minMaxTemperature" />
+        app:layout_constraintTop_toBottomOf="@id/currentWrapper" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
