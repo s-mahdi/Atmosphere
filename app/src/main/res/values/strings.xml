@@ -11,7 +11,7 @@
     <string name="appNameFarsi">اتمسفر</string>
     <string name="search_places">Search places</string>
     <string name="finds_city">finds city</string>
-    <string name="search_location">جست و جوی شهر</string>
+    <string name="search_location">نام شهر یا روستا</string>
 
     <!--drawer items-->
     <string name="refresh">refresh</string>
