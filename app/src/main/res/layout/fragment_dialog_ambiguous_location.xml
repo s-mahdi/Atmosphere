@@ -10,6 +10,7 @@
         android:id="@+id/dialogToolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layoutDirection="rtl"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
