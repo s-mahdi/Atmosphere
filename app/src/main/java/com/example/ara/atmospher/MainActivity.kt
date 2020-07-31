@@ -8,6 +8,7 @@ import android.view.View.OnFocusChangeListener
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -62,17 +63,17 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModel.citiesData.observe(this, Observer {
-            if (it != null) {
+            if (it != null && it.results.isNotEmpty()) {
                 val locations = filterLocations(it.results, "city", "village")
                 if (locations.size == 1) {
-                    val location = locations[0]
+                    val location = locations[0]!!
                     val locationName = location.components.city?: location.components.town?: location.components.village
                     viewManager?.setCityView(locationName!!)
                     viewModel.setCityGeometry(location.geometry)
                     val map: Map<String, Geometry> = mapOf(locationName!! to locations[0].geometry)
                     updatePreferences(this@MainActivity, "city", Gson().toJson(map))
-                } else launchLocationPickerDialog(this, locations)
-            }
+                } else if (locations.size > 1) launchLocationPickerDialog(this, locations)
+            } else Toast.makeText(this@MainActivity, "آخ! پیدا نشد :(", Toast.LENGTH_SHORT).show()
         })
 
         val city = syncPreferences(this)
