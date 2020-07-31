@@ -2,7 +2,6 @@ package com.example.ara.atmospher.functions
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -15,7 +14,6 @@ import com.example.ara.atmospher.R
 import com.example.ara.atmospher.adapters.ForecastRecyclerAdapter
 import com.example.ara.atmospher.models.openWeather.oneCall.Daily
 import com.example.ara.atmospher.models.openWeather.oneCall.OneCall
-import com.example.ara.atmospher.models.opencage.Result
 import com.mikepenz.materialdrawer.holder.ImageHolder
 import com.mikepenz.materialdrawer.holder.StringHolder
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
@@ -37,8 +35,6 @@ class ViewManager(private val activity: Activity) {
     private val barsWrapper: ConstraintLayout = activity.findViewById(R.id.barsWrapper)
     private val slider: MaterialDrawerSliderView = activity.findViewById(R.id.slider)
     private val recyclerView: RecyclerView = activity.findViewById(R.id.forecastRecyclerView)
-//    private val forecastTable: LinearLayout = activity.findViewById(R.id.forecastTable)
-//    private val forecastRow: ConstraintLayout = activity.findViewById(R.id.forecastRow)
 
     fun hideView(view: View) {
         view.visibility = View.INVISIBLE
