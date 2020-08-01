@@ -41,5 +41,6 @@ Proin hendrerit tempor augue, a interdum nulla semper eu. Maecenas vitae eros le
     </string>
     <string name="forecast">پیش‌بینی</string>
     <string name="forecast_icon">forecast icon</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 
 </resources>

@@ -1,0 +1,21 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        app:key="unit"
+        app:summaryOff="سانتی گراد"
+        app:summaryOn="فارنهایت"
+        app:title="واحد دما" />
+
+    <Preference app:title="درباره ما" />
+
+    <Preference app:title="تماس با ما" />
+
+    <Preference
+        android:enabled="false"
+        android:persistent="true"
+        app:allowDividerAbove="true"
+        app:selectable="false"
+        app:summary="version 1.0.0" />
+
+</PreferenceScreen>
