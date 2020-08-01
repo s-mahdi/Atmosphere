@@ -2,15 +2,16 @@ package com.example.ara.atmospher.functions
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ara.atmospher.R
+import com.example.ara.atmospher.activities.SettingsActivity
 import com.example.ara.atmospher.adapters.ForecastRecyclerAdapter
 import com.example.ara.atmospher.models.openWeather.oneCall.Daily
 import com.example.ara.atmospher.models.openWeather.oneCall.OneCall
@@ -77,18 +78,18 @@ class ViewManager(private val activity: Activity) {
         item1.name = StringHolder(R.string.settings)
         item1.icon = ImageHolder(R.drawable.ic_settings)
 
-        val item2 = PrimaryDrawerItem()
-        item2.identifier = 2
-        item2.name = StringHolder(R.string.temperature_unit)
-        item2.icon = ImageHolder(R.drawable.ic_thermometer)
 
         slider.itemAdapter.add(
-                item1,
-                item2
+                item1
         )
 
         slider.onDrawerItemClickListener = { v, drawerItem, position ->
-            Toast.makeText(activity, "position is $position", Toast.LENGTH_SHORT).show()
+            when (position) {
+                0 -> {
+                    val intent = Intent(activity, SettingsActivity::class.java)
+                    activity.startActivity(intent)
+                }
+            }
             false
         }
 
