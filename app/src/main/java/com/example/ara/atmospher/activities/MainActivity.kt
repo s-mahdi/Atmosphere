@@ -1,6 +1,9 @@
 package com.example.ara.atmospher.activities
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.widget.EditText
@@ -39,9 +42,16 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.AppTheme_Launcher)
         super.onCreate(savedInstanceState)
 
+        if (checkFirstTime(this)) {
+            getPreferences(Context.MODE_PRIVATE).edit().putBoolean("isFirstTime", false).apply()
+            startActivity(Intent(this@MainActivity, Introduction::class.java))
+            finish()
+        }
+
         //hide status bar
         hideStatusBar(this)
         setContentView(R.layout.activity_main)
+        initiate()
 
         viewManager?.setSlider()
 
@@ -100,7 +110,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    init {
+    private fun initiate () {
         // set views
         climateConditionImageView = findViewById(R.id.imageView_climateCondition)
         addCityImageButton = findViewById(R.id.imageButton_addCity)

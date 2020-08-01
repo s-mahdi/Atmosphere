@@ -1,30 +1,51 @@
 package com.example.ara.atmospher.activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.example.ara.atmospher.R
+import com.github.appintro.AppIntro2
+import com.github.appintro.AppIntroFragment
+import com.github.appintro.model.SliderPage
 
-class Introduction : AppCompatActivity() {
-    private var letsGoButton: Button? = null
+class Introduction : AppIntro2() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val i = Intent(this@Introduction, MainActivity::class.java)
-        val sharedPreferences = getSharedPreferences("com.example.ara.atmospher", Context.MODE_PRIVATE)
-        if (sharedPreferences.getString("isLogedIn", false.toString()) != "true") {
-            setContentView(R.layout.activity_introduction)
-            sharedPreferences.edit().putString("isLogedIn", "true").apply()
-            letsGoButton = findViewById(R.id.button_start)
-            letsGoButton?.setOnClickListener(View.OnClickListener {
-                startActivity(i)
-                finish()
-            })
-        } else {
-            startActivity(i)
-            finish()
-        }
+        isColorTransitionsEnabled = true
+
+        val slide1 = SliderPage()
+        slide1.title = "اتمسفر"
+        slide1.description = "اتمسفر یک نرم افزار وضعیت آب و هواست"
+        slide1.imageDrawable = R.drawable.ic_clouds
+        slide1.backgroundColor = ContextCompat.getColor(this, R.color.blue)
+        addSlide(AppIntroFragment.newInstance(slide1))
+
+        val slide2 = SliderPage()
+        slide2.title = "وضعیت آب‌ و هوا"
+        slide2.description = "اتمسفر وضعیت آب و هوا و پیشبینی رو تا یک هفته نشون میده"
+        slide2.imageDrawable = R.drawable.ic_sun
+        slide2.backgroundColor = ContextCompat.getColor(this, R.color.purple)
+        addSlide(AppIntroFragment.newInstance(slide2))
+
+        val slide3 = SliderPage()
+        slide3.title = "رایگان و منبع باز"
+        slide3.description = "اتمسفر رایگان و برای ‌همه است."
+        slide3.imageDrawable = R.drawable.ic_heart
+        slide3.backgroundColor = ContextCompat.getColor(this, R.color.red)
+        addSlide(AppIntroFragment.newInstance(slide3))
+    }
+
+    override fun onSkipPressed(currentFragment: Fragment?) {
+        super.onSkipPressed(currentFragment)
+        startActivity(Intent(this@Introduction, MainActivity::class.java))
+        finish()
+    }
+
+
+    override fun onDonePressed(currentFragment: Fragment?) {
+        super.onDonePressed(currentFragment)
+        startActivity(Intent(this@Introduction, MainActivity::class.java))
+        finish()
     }
 }
