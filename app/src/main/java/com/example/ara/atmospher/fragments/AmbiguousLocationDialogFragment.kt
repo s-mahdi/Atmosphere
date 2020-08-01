@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ara.atmospher.MainActivity
+import com.example.ara.atmospher.activities.MainActivity
 import com.example.ara.atmospher.R
 import com.example.ara.atmospher.adapters.LocationsRecyclerAdapter
 import com.example.ara.atmospher.functions.getLocationName

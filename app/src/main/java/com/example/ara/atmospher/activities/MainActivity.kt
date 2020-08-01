@@ -1,7 +1,5 @@
-package com.example.ara.atmospher
+package com.example.ara.atmospher.activities
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnFocusChangeListener
@@ -13,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.ara.atmospher.R
 import com.example.ara.atmospher.events.ClickManager
 import com.example.ara.atmospher.events.KeyManager
 import com.example.ara.atmospher.functions.*
@@ -21,8 +20,6 @@ import com.example.ara.atmospher.viewModels.MainViewModel
 import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
-    //    var navView: NavigationView? = null
-    private var cityName: String? = null
     private var climateConditionImageView: ImageView? = null
     private var backGroundImageView: ImageView? = null
     private var addCityImageButton: ImageButton? = null
@@ -34,7 +31,6 @@ class MainActivity : AppCompatActivity() {
             : EditText? = null
     private var mDrawerLayout: DrawerLayout? = null
     private var viewManager: ViewManager? = null
-    private var sharedPref: SharedPreferences? = null
     private var clickManager: ClickManager? = null
     private var keyManager: KeyManager? = null
     private lateinit var viewModel: MainViewModel
@@ -44,12 +40,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //hide status bar
-        hideStatusBar(this);
+        hideStatusBar(this)
         setContentView(R.layout.activity_main)
 
-        initializer()
-
-        viewManager?.setSlider();
+        viewManager?.setSlider()
 
         setEvents()
 
@@ -66,11 +60,11 @@ class MainActivity : AppCompatActivity() {
             if (it != null && it.results.isNotEmpty()) {
                 val locations = filterLocations(it.results, "city", "village")
                 if (locations.size == 1) {
-                    val location = locations[0]!!
-                    val locationName = location.components.city?: location.components.town?: location.components.village
-                    viewManager?.setCityView(locationName!!)
+                    val location = locations[0]
+                    val locationName = getLocationName(location)
+                    viewManager?.setCityView(locationName)
                     viewModel.setCityGeometry(location.geometry)
-                    val map: Map<String, Geometry> = mapOf(locationName!! to locations[0].geometry)
+                    val map: Map<String, Geometry> = mapOf(locationName to locations[0].geometry)
                     updatePreferences(this@MainActivity, "city", Gson().toJson(map))
                 } else if (locations.size > 1) launchLocationPickerDialog(this, locations)
             } else Toast.makeText(this@MainActivity, "آخ! پیدا نشد :(", Toast.LENGTH_SHORT).show()
@@ -80,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         if (city != null) {
             viewModel.setCityGeometry(city.values.first())
             viewManager?.setCityView(city.keys.first())
-        } else viewModel.setCityName("tehran")
+        } else viewModel.setCityName("تهران")
     }
 
     override fun onDestroy() {
@@ -106,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initializer() {
+    init {
         // set views
         climateConditionImageView = findViewById(R.id.imageView_climateCondition)
         addCityImageButton = findViewById(R.id.imageButton_addCity)
@@ -118,8 +112,6 @@ class MainActivity : AppCompatActivity() {
         backGroundImageView = findViewById(R.id.imageView_background)
         mDrawerLayout = findViewById(R.id.layout)
         viewManager = ViewManager(this)
-        sharedPref = getSharedPreferences(
-                getString(R.string.city_key), Context.MODE_PRIVATE)
 
         clickManager = ClickManager(this) {
             onSearch(this) {

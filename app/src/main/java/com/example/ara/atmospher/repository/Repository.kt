@@ -1,6 +1,7 @@
 package com.example.ara.atmospher.repository
 
 import androidx.lifecycle.LiveData
+import com.example.ara.atmospher.functions.filterLocations
 import com.example.ara.atmospher.models.openWeather.Current
 import com.example.ara.atmospher.models.openWeather.Forecast5
 import com.example.ara.atmospher.models.openWeather.oneCall.OneCall
