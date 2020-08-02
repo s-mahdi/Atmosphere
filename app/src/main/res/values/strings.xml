@@ -42,5 +42,15 @@ Proin hendrerit tempor augue, a interdum nulla semper eu. Maecenas vitae eros le
     <string name="forecast">پیش‌بینی</string>
     <string name="forecast_icon">forecast icon</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="details">جزئیات</string>
+    <string name="weather_icon">weather icon</string>
+    <string name="feels_like">دمای احساسی</string>
+    <string name="humidity">رطوبت</string>
+    <string name="visibility">میدان دید</string>
+    <string name="uv_index">شاخص ماورء بنفش</string>
+    <string name="wind_and_pressure">باد و فشار هوا</string>
+    <string name="wind_speed">سرعت باد</string>
+    <string name="wind_direction">جهت باد</string>
+    <string name="pressure">فشار هوا</string>
 
 </resources>

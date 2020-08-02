@@ -8,4 +8,31 @@
         <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyle</item>
     </style>
 
+    <style name="card_row_result">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/vazir_light</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="card_row_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/vazir_light</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="card_title">
+        <item name="android:fontFamily">@font/vazir_medium</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="card_style">
+        <item name="cardBackgroundColor">#99000000</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
 </resources>
