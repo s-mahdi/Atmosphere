@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/card_style"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/windCardTitle"
+            style="@style/card_title"
+            android:text="@string/wind_and_pressure"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loader"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/wind_mill_animation" />
+
+
+        <GridLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:columnCount="2"
+            app:layout_constraintEnd_toStartOf="@+id/loader"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/windCardTitle">
+
+            <TextView
+                style="@style/card_row_title"
+                android:layout_gravity="fill_horizontal"
+                android:text="@string/wind_speed" />
+
+            <TextView
+                android:id="@+id/windSpeed"
+                style="@style/card_row_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="30" />
+
+
+            <TextView
+                style="@style/card_row_title"
+                android:layout_gravity="fill_horizontal"
+                android:text="@string/wind_direction" />
+
+            <TextView
+                android:id="@+id/windDirection"
+                style="@style/card_row_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="30" />
+
+            <TextView
+                style="@style/card_row_title"
+                android:layout_gravity="fill_horizontal"
+                android:text="@string/pressure" />
+
+            <TextView
+                android:id="@+id/pressure"
+                style="@style/card_row_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="30" />
+
+        </GridLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
