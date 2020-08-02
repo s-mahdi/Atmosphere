@@ -14,10 +14,8 @@
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/card_title"
             android:text="@string/forecast"
-            android:fontFamily="@font/vazir_medium"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

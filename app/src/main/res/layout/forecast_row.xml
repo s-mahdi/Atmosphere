@@ -11,11 +11,8 @@
 
     <TextView
         android:id="@+id/forecastDay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:textColor="@android:color/white"
-        android:fontFamily="@font/vazir_medium"
+        style="@style/card_row_title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,28 +30,20 @@
 
     <TextView
         android:id="@+id/forecastMax"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/card_row_result"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/vazir_medium"
-        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.517"
         tools:text="22" />
 
     <TextView
         android:id="@+id/forecastMin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/card_row_result"
         android:layout_marginEnd="16dp"
-        android:textColor="@android:color/white"
-        android:fontFamily="@font/vazir_medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/forecastMax"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.482"
         tools:text="31" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
