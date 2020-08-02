@@ -7,9 +7,17 @@
         app:summaryOn="فارنهایت"
         app:title="واحد دما" />
 
-    <Preference app:title="درباره ما" />
+    <Preference app:title="درباره ما">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/s-mahdi/Atmosphere" />
+    </Preference>
 
-    <Preference app:title="تماس با ما" />
+    <Preference app:title="تماس با ما">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/s-mahdi/Atmosphere" />
+    </Preference>
 
     <Preference
         android:enabled="false"
