@@ -28,6 +28,9 @@ data class Current(
         @SerializedName("dew_point")
         val dewPoint: Double,
 
+        @SerializedName("uvi")
+        val uvi: Double,
+
         @SerializedName("clouds")
         val clouds: Int,
 

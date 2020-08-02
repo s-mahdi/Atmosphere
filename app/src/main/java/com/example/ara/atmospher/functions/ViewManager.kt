@@ -36,6 +36,14 @@ class ViewManager(private val activity: Activity) {
     private val barsWrapper: ConstraintLayout = activity.findViewById(R.id.barsWrapper)
     private val slider: MaterialDrawerSliderView = activity.findViewById(R.id.slider)
     private val recyclerView: RecyclerView = activity.findViewById(R.id.forecastRecyclerView)
+    private val feelsLike: TextView = activity.findViewById(R.id.feelsLike)
+    private val humidity: TextView = activity.findViewById(R.id.humidity)
+    private val visibility: TextView = activity.findViewById(R.id.visibility)
+    private val uvIndex: TextView = activity.findViewById(R.id.uvIndex)
+    private val detailIcon: ImageView = activity.findViewById(R.id.detailIcon)
+    private val windSpeed: TextView = activity.findViewById(R.id.windSpeed)
+    private val windDirection: TextView = activity.findViewById(R.id.windDirection)
+    private val pressure: TextView = activity.findViewById(R.id.pressure)
 
     fun hideView(view: View) {
         view.visibility = View.INVISIBLE
@@ -70,6 +78,16 @@ class ViewManager(private val activity: Activity) {
         maxTemp.text = today.temp.max.roundToInt().toString().plus("°")
         condition.text = getCondition(id)
         icon.setImageDrawable(activity.getDrawable(getIcon(id)))
+
+        feelsLike.text = current.feelsLike.toString().plus("°C")
+        humidity.text = current.humidity.toString().plus("%")
+        visibility.text = (current.visibility / 1000).toString().plus(" کیلومتر")
+        uvIndex.text = getUV(current.uvi.roundToInt())
+        detailIcon.setImageDrawable(activity.getDrawable(getIcon(id)))
+
+        windSpeed.text = current.windSpeed.toString().plus(" متر/ثانیه")
+        windDirection.text = getWindDirection(current.windDegree)
+        pressure.text = current.pressure.toString().plus(" هکتو پاسکال")
     }
 
     fun setSlider() {
