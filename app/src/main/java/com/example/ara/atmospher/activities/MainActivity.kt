@@ -3,7 +3,6 @@ package com.example.ara.atmospher.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.widget.EditText
@@ -110,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initiate () {
+    private fun initiate() {
         // set views
         climateConditionImageView = findViewById(R.id.imageView_climateCondition)
         addCityImageButton = findViewById(R.id.imageButton_addCity)

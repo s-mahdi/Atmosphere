@@ -22,6 +22,4 @@ fun launchLocationPickerDialog(activity: FragmentActivity, cityList: List<Result
     fragment.arguments = bundle
     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
     fragmentTransaction.add(android.R.id.content, fragment).addToBackStack(null).commit()
-//    fragmentTransaction.add(R.id.content, fragment)
-//            .addToBackStack(null).commit()
 }

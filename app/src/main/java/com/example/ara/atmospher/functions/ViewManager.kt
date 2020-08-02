@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ara.atmospher.R
@@ -45,6 +46,8 @@ class ViewManager(private val activity: Activity) {
     private val windDirection: TextView = activity.findViewById(R.id.windDirection)
     private val pressure: TextView = activity.findViewById(R.id.pressure)
 
+    private val isImperial = PreferenceManager.getDefaultSharedPreferences(activity).getBoolean("unit", false)
+
     fun hideView(view: View) {
         view.visibility = View.INVISIBLE
     }
@@ -73,13 +76,13 @@ class ViewManager(private val activity: Activity) {
 
         val id = current.weatherList[0].id
         bg.setImageDrawable(activity.getDrawable(getBackground(id)))
-        temp.text = current.temp.roundToInt().toString().plus("°")
-        minTemp.text = today.temp.min.roundToInt().toString().plus("°")
-        maxTemp.text = today.temp.max.roundToInt().toString().plus("°")
+        temp.text = getTempByUnit(current.temp.roundToInt(), isImperial).toString().plus("°")
+        minTemp.text = getTempByUnit(today.temp.min.roundToInt(), isImperial).toString().plus("°")
+        maxTemp.text = getTempByUnit(today.temp.max.roundToInt(), isImperial).toString().plus("°")
         condition.text = getCondition(id)
         icon.setImageDrawable(activity.getDrawable(getIcon(id)))
 
-        feelsLike.text = current.feelsLike.toString().plus("°C")
+        feelsLike.text = getTempByUnit(current.feelsLike.roundToInt(), isImperial).toString().plus("°")
         humidity.text = current.humidity.toString().plus("%")
         visibility.text = (current.visibility / 1000).toString().plus(" کیلومتر")
         uvIndex.text = getUV(current.uvi.roundToInt())
@@ -96,16 +99,16 @@ class ViewManager(private val activity: Activity) {
         item1.name = StringHolder(R.string.settings)
         item1.icon = ImageHolder(R.drawable.ic_settings)
 
-
         slider.itemAdapter.add(
                 item1
         )
 
-        slider.onDrawerItemClickListener = { v, drawerItem, position ->
+        slider.onDrawerItemClickListener = { _, _, position ->
             when (position) {
                 0 -> {
                     val intent = Intent(activity, SettingsActivity::class.java)
                     activity.startActivity(intent)
+                    activity.finish()
                 }
             }
             false
