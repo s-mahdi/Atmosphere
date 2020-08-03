@@ -16,53 +16,6 @@ object Repository {
     private const val openWeatherKey = "ece8f3c084bf15aef779da23422b4aab"
     private const val openCageKey = "5f484667ba264bedbef60ff442b75270"
 
-    fun getWeather(cityName: String): LiveData<Current?> {
-        job = Job()
-        return object : LiveData<Current?>() {
-            override fun onActive() {
-                super.onActive()
-                job?.let { theJob ->
-                    CoroutineScope(IO + theJob).launch {
-                        val weatherData = RetrofitClient.openWeatherService.getWeather(cityName, openWeatherKey)
-                        withContext(Main) {
-                            if (weatherData.isSuccessful) {
-                                value = weatherData.body()
-                                theJob.complete()
-                            } else {
-                                value = null
-                                theJob.cancel()
-                            }
-                        }
-                    }
-                }
-
-            }
-        }
-    }
-
-    fun getForecast(cityName: String): LiveData<Forecast5?> {
-        job = Job()
-        return object : LiveData<Forecast5?>() {
-            override fun onActive() {
-                super.onActive()
-                job?.let { theJob ->
-                    CoroutineScope(IO + theJob).launch {
-                        val response = RetrofitClient.openWeatherService.getForecast(cityName, openWeatherKey)
-                        withContext(Main) {
-                            if (response.isSuccessful) {
-                                value = response.body()
-                                theJob.complete()
-                            } else {
-                                value = null
-                                theJob.cancel()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     fun oneCall(lat: Double, lon: Double): LiveData<OneCall?> {
         job = Job()
         return object : LiveData<OneCall?>() {
