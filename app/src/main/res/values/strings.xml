@@ -52,5 +52,7 @@ Proin hendrerit tempor augue, a interdum nulla semper eu. Maecenas vitae eros le
     <string name="wind_speed">سرعت باد</string>
     <string name="wind_direction">جهت باد</string>
     <string name="pressure">فشار هوا</string>
+    <string name="no_connection">اتصال با سرور برقرار نیست!</string>
+    <string name="try_again">تلاش مجدد</string>
 
 </resources>
