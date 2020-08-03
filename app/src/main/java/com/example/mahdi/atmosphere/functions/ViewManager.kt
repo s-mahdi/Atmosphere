@@ -45,6 +45,7 @@ class ViewManager(private val activity: Activity) {
     private val windSpeed: TextView = activity.findViewById(R.id.windSpeed)
     private val windDirection: TextView = activity.findViewById(R.id.windDirection)
     private val pressure: TextView = activity.findViewById(R.id.pressure)
+    private val noConnection: ConstraintLayout = activity.findViewById(R.id.noConnection)
 
     private val isImperial = PreferenceManager.getDefaultSharedPreferences(activity).getBoolean("unit", false)
 
@@ -91,6 +92,11 @@ class ViewManager(private val activity: Activity) {
         windSpeed.text = current.windSpeed.toString().plus(" متر/ثانیه")
         windDirection.text = getWindDirection(current.windDegree)
         pressure.text = current.pressure.toString().plus(" هکتو پاسکال")
+    }
+
+    fun showNoConnection () {
+        noConnection.visibility = View.VISIBLE
+        loaderLayout.visibility = View.GONE
     }
 
     fun setSlider() {

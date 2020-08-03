@@ -9,5 +9,5 @@ interface OpenCageService {
     @GET("/geocode/v1/json")
     suspend fun searchCities(@Query("q") input: String,
                           @Query("key") key: String,
-                          @Query("language") language: String): Response<OpenCageResult>
+                          @Query("language") language: String): Response<OpenCageResult>?
 }

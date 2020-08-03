@@ -11,5 +11,5 @@ interface OpenWeatherService {
     @GET("/data/2.5/onecall?units=metric")
     suspend fun oneCall(@Query("lat") lat: Double,
                         @Query("lon") lon: Double,
-                        @Query("appid") API_KEY: String): Response<OneCall>
+                        @Query("appid") API_KEY: String): Response<OneCall>?
 }

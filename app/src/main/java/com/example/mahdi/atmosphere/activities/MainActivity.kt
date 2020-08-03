@@ -5,10 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnFocusChangeListener
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -31,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private var searchBar: View? = null
     private var searchInput // used for city name
             : EditText? = null
+    private var reload: Button? = null
     private var mDrawerLayout: DrawerLayout? = null
     private var viewManager: ViewManager? = null
     private var clickManager: ClickManager? = null
@@ -58,24 +56,28 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        viewModel.oneCallData.observe(this, Observer {
+        viewModel.oneCallData?.observe(this, Observer {
             if (it != null) {
                 viewManager?.setWeatherView(it)
                 viewManager?.setForecastView(it)
+            } else {
+                viewManager?.showNoConnection()
             }
         })
 
-        viewModel.citiesData.observe(this, Observer {
-            if (it != null && it.results.isNotEmpty()) {
-                val locations = filterLocations(it.results, "city", "village")
-                if (locations.size == 1) {
-                    val location = locations[0]
-                    val locationName = getLocationName(location)
-                    viewManager?.setCityView(locationName)
-                    viewModel.setCityGeometry(location.geometry)
-                    val map: Map<String, Geometry> = mapOf(locationName to locations[0].geometry)
-                    updatePreferences(this@MainActivity, "city", Gson().toJson(map))
-                } else if (locations.size > 1) launchLocationPickerDialog(this, locations)
+        viewModel.citiesData?.observe(this, Observer {
+            if (it != null) {
+                if (it.results.isNotEmpty()) {
+                    val locations = filterLocations(it.results, "city", "village")
+                    if (locations.size == 1) {
+                        val location = locations[0]
+                        val locationName = getLocationName(location)
+                        viewManager?.setCityView(locationName)
+                        viewModel.setCityGeometry(location.geometry)
+                        val map: Map<String, Geometry> = mapOf(locationName to locations[0].geometry)
+                        updatePreferences(this@MainActivity, "city", Gson().toJson(map))
+                    } else if (locations.size > 1) launchLocationPickerDialog(this, locations)
+                }
             } else Toast.makeText(this@MainActivity, "آخ! پیدا نشد :(", Toast.LENGTH_SHORT).show()
         })
 
@@ -97,6 +99,7 @@ class MainActivity : AppCompatActivity() {
         closeSearchPlotImageButton?.setOnClickListener(clickManager)
         drawerHamburgerImageButton?.setOnClickListener(clickManager)
         backGroundImageView?.setOnClickListener(clickManager)
+        reload?.setOnClickListener(clickManager)
         searchInput?.setOnKeyListener(KeyManager(this) {
             onSearch(this) {
                 viewModel.setCityName(searchInput?.text.toString())
@@ -118,6 +121,7 @@ class MainActivity : AppCompatActivity() {
         searchInput = findViewById(R.id.editText_search_city)
         closeSearchPlotImageButton = findViewById(R.id.ImageButton_close_search_plot)
         drawerHamburgerImageButton = findViewById(R.id.imageButton_drawer_hamburger)
+        reload = findViewById(R.id.reload)
         backGroundImageView = findViewById(R.id.imageView_background)
         mDrawerLayout = findViewById(R.id.layout)
         viewManager = ViewManager(this)

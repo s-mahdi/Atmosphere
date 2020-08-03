@@ -1,14 +1,14 @@
 package com.example.mahdi.atmosphere.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
-import com.example.mahdi.atmosphere.models.openWeather.Current
-import com.example.mahdi.atmosphere.models.openWeather.Forecast5
 import com.example.mahdi.atmosphere.models.openWeather.oneCall.OneCall
 import com.example.mahdi.atmosphere.models.opencage.OpenCageResult
 import com.example.mahdi.atmosphere.retrofit.RetrofitClient
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import java.io.IOException
 
 object Repository {
 
@@ -23,15 +23,22 @@ object Repository {
                 super.onActive()
                 job?.let { theJob ->
                     CoroutineScope(IO + theJob).launch {
-                        val response = RetrofitClient.openWeatherService.oneCall(lat, lon, openWeatherKey)
-                        withContext(Main) {
-                            if (response.isSuccessful) {
-                                value = response.body()
-                                theJob.complete()
+                        try {
+                            val response = RetrofitClient.openWeatherService.oneCall(lat, lon, openWeatherKey)
+                            if (response != null && response.isSuccessful) {
+                                withContext(Main) {
+                                    value = response.body()
+                                    theJob.complete()
+                                }
                             } else {
-                                value = null
-                                theJob.cancel()
+                                throw IOException("unable to connect")
                             }
+                        } catch (error: IOException) {
+                            withContext(Main){
+                                value = null
+                            }
+                            job?.cancelAndJoin()
+                            Log.e("NETWORK", "onActive: $error")
                         }
                     }
                 }
@@ -46,22 +53,28 @@ object Repository {
                 super.onActive()
                 job?.let { theJob ->
                     CoroutineScope(IO + theJob).launch {
-                        val response = RetrofitClient.openCageService.searchCities(cityName, openCageKey, "fa")
-                        withContext(Main) {
-                            if (response.isSuccessful) {
-                                value = response.body()
-                                theJob.complete()
+                        try {
+                            val response = RetrofitClient.openCageService.searchCities(cityName, openCageKey, "fa")
+                            if (response != null && response.isSuccessful) {
+                                withContext(Main) {
+                                    value = response.body()
+                                    theJob.complete()
+                                }
                             } else {
-                                value = null
-                                theJob.cancel()
+                                throw IOException("unable to connect")
                             }
+                        } catch (error: IOException) {
+                            withContext(Main){
+                                value = null
+                            }
+                            job?.cancel()
+                            Log.e("NETWORK", "onActive: $error")
                         }
                     }
                 }
             }
         }
     }
-
 
     fun cancelJobs() {
         job?.cancel()

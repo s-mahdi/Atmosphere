@@ -1,6 +1,8 @@
 package com.example.mahdi.atmosphere.events
 
 import android.app.Activity
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -8,7 +10,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.mahdi.atmosphere.R
+import com.example.mahdi.atmosphere.activities.MainActivity
 import com.example.mahdi.atmosphere.functions.ViewManager
+
 
 class ClickManager(private val activity: Activity, val onSearch: () -> Unit) : View.OnClickListener {
 
@@ -33,6 +37,13 @@ class ClickManager(private val activity: Activity, val onSearch: () -> Unit) : V
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
             }
             R.id.imageButton_drawer_hamburger -> mDrawerLayout.openDrawer(GravityCompat.START)
+            R.id.reload -> {
+                val intent = Intent(activity, MainActivity::class.java)
+                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent)
+                activity.finish()
+                Runtime.getRuntime().exit(0)
+            }
             else -> {
                 viewManager.hideKeyboardFrom(activity, view)
                 viewManager.hideView(searchBar)

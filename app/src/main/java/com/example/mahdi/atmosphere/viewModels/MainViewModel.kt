@@ -14,12 +14,12 @@ class MainViewModel : ViewModel() {
     private val _geometry: MutableLiveData<Geometry> = MutableLiveData()
 
     // whenever `_cityName` changed run the `getWeather` from Repository
-    val oneCallData: LiveData<OneCall?> = Transformations
+    val oneCallData: LiveData<OneCall?>? = Transformations
             .switchMap(_geometry) { geometry ->
                 Repository.oneCall(geometry.lat, geometry.lng)
             }
 
-    val citiesData: LiveData<OpenCageResult?> = Transformations
+    val citiesData: LiveData<OpenCageResult?>? = Transformations
             .switchMap(_cityName) {
                 Repository.searchCities(it)
             }
