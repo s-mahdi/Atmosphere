@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +21,6 @@ import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
     private var climateConditionImageView: ImageView? = null
-    private var backGroundImageView: ImageView? = null
     private var addCityImageButton: ImageButton? = null
     private var searchButton: ImageButton? = null
     private var closeSearchPlotImageButton: ImageButton? = null
@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private var viewManager: ViewManager? = null
     private var clickManager: ClickManager? = null
     private var keyManager: KeyManager? = null
+    private var weatherWrapper: ConstraintLayout? = null
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,18 +68,22 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.citiesData?.observe(this, Observer {
             if (it != null) {
-                if (it.results.isNotEmpty()) {
-                    val locations = filterLocations(it.results, "city", "village")
-                    if (locations.size == 1) {
+                val locations = filterLocations(it.results, "city", "village")
+                when {
+                    locations.size == 1 -> {
                         val location = locations[0]
                         val locationName = getLocationName(location)
                         viewManager?.setCityView(locationName)
                         viewModel.setCityGeometry(location.geometry)
                         val map: Map<String, Geometry> = mapOf(locationName to locations[0].geometry)
                         updatePreferences(this@MainActivity, "city", Gson().toJson(map))
-                    } else if (locations.size > 1) launchLocationPickerDialog(this, locations)
+                    }
+                    locations.size > 1 -> {
+                        launchLocationPickerDialog(this, locations)
+                    }
+                    else -> Toast.makeText(this@MainActivity, "آخ! پیدا نشد :(", Toast.LENGTH_SHORT).show()
                 }
-            } else Toast.makeText(this@MainActivity, "آخ! پیدا نشد :(", Toast.LENGTH_SHORT).show()
+            }
         })
 
         val city = syncPreferences(this)
@@ -98,18 +103,14 @@ class MainActivity : AppCompatActivity() {
         searchButton?.setOnClickListener(clickManager)
         closeSearchPlotImageButton?.setOnClickListener(clickManager)
         drawerHamburgerImageButton?.setOnClickListener(clickManager)
-        backGroundImageView?.setOnClickListener(clickManager)
         reload?.setOnClickListener(clickManager)
-        searchInput?.setOnKeyListener(KeyManager(this) {
-            onSearch(this) {
-                viewModel.setCityName(searchInput?.text.toString())
-            }
-        })
+        searchInput?.setOnKeyListener(keyManager)
         searchInput?.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 searchBar?.visibility = View.INVISIBLE
             }
         }
+        weatherWrapper?.setOnClickListener(clickManager)
     }
 
     private fun initiate() {
@@ -122,16 +123,17 @@ class MainActivity : AppCompatActivity() {
         closeSearchPlotImageButton = findViewById(R.id.ImageButton_close_search_plot)
         drawerHamburgerImageButton = findViewById(R.id.imageButton_drawer_hamburger)
         reload = findViewById(R.id.reload)
-        backGroundImageView = findViewById(R.id.imageView_background)
         mDrawerLayout = findViewById(R.id.layout)
         viewManager = ViewManager(this)
+        weatherWrapper = findViewById(R.id.weatherWrapper)
 
         clickManager = ClickManager(this) {
             onSearch(this) {
                 viewModel.setCityName(searchInput?.text.toString())
             }
         }
-        keyManager = KeyManager(this) {
+
+        keyManager = KeyManager {
             onSearch(this) {
                 viewModel.setCityName(searchInput?.text.toString())
             }
