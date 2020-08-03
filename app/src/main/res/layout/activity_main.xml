@@ -70,6 +70,7 @@
             app:layout_constraintTop_toBottomOf="@id/barsWrapper">
 
             <include
+                android:id="@+id/weatherWrapper"
                 layout="@layout/weather_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -83,9 +84,9 @@
     <include
         android:id="@+id/noConnection"
         layout="@layout/no_connection"
-        android:visibility="invisible"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
 
     <com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView
         android:id="@+id/slider"
